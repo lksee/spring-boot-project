@@ -1,5 +1,6 @@
 package com.playdata.springbootproject.web;
 
+import com.playdata.springbootproject.config.auth.LoginUser;
 import com.playdata.springbootproject.config.auth.dto.SessionUser;
 import com.playdata.springbootproject.service.posts.PostsService;
 import com.playdata.springbootproject.web.dto.PostsResponseDto;
@@ -17,11 +18,10 @@ public class IndexController {
     private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) {
         // Model: 서버 템플릿 엔진에서 사용할 수 있는 객체를 저장할 수 있다.
         model.addAttribute("posts", postsService.findAllDesc());
 
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
         if (user != null) { // 세션에 저장된 값이 있을 때만 model에 userName으로 등록한다.
             model.addAttribute("userName", user.getName());
         }
